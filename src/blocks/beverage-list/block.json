@@ -31,6 +31,10 @@
 		"displayMode": {
 			"type": "string",
 			"default": "simple"
+		},
+		"showSearch": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"textdomain": "beer-list",

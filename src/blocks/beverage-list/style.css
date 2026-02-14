@@ -1,5 +1,25 @@
 /* Front-end + editor shared styles — structural only. */
 
+.beverage-list__search {
+	margin-block-end: 1rem;
+}
+
+.beverage-list__search-input {
+	width: 100%;
+	max-width: 360px;
+	padding: 0.5rem 0.75rem;
+	font: inherit;
+	border: 1px solid currentColor;
+	background: transparent;
+	opacity: 0.8;
+}
+
+.beverage-list__search-input:focus {
+	opacity: 1;
+	outline: 2px solid currentColor;
+	outline-offset: -2px;
+}
+
 .beverage-list__filters {
 	display: flex;
 	flex-wrap: wrap;

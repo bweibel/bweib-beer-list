@@ -8,6 +8,7 @@ $posts_per_page = $attributes['postsPerPage'] ?? 12;
 $beverage_type  = $attributes['beverageType'] ?? '';
 $show_filters   = $attributes['showFilters'] ?? true;
 $display_mode   = $attributes['displayMode'] ?? 'simple';
+$show_search    = $attributes['showSearch'] ?? false;
 $is_detailed    = 'detailed' === $display_mode;
 
 $query_args = array(
@@ -30,6 +31,16 @@ $beverages = new WP_Query( $query_args );
 ?>
 
 <div <?php echo get_block_wrapper_attributes( array( 'class' => 'wp-block-beer-list-beverage-list is-mode-' . esc_attr( $display_mode ) ) ); ?>>
+	<?php if ( $show_search ) : ?>
+		<div class="beverage-list__search">
+			<input
+				type="search"
+				class="beverage-list__search-input"
+				placeholder="<?php esc_attr_e( 'Search beverages…', 'beer-list' ); ?>"
+			/>
+		</div>
+	<?php endif; ?>
+
 	<?php if ( $show_filters ) : ?>
 		<?php
 		$types = get_terms( array(

@@ -5,7 +5,7 @@ import { store as coreStore } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { postsPerPage, beverageType, showFilters, displayMode } = attributes;
+	const { postsPerPage, beverageType, showFilters, displayMode, showSearch } = attributes;
 	const isDetailed = displayMode === 'detailed';
 	const blockProps = useBlockProps( {
 		className: `wp-block-beer-list-beverage-list is-mode-${ displayMode }`,
@@ -83,6 +83,11 @@ export default function Edit( { attributes, setAttributes } ) {
 						checked={ showFilters }
 						onChange={ ( val ) => setAttributes( { showFilters: val } ) }
 					/>
+					<ToggleControl
+						label={ __( 'Show search bar', 'beer-list' ) }
+						checked={ showSearch }
+						onChange={ ( val ) => setAttributes( { showSearch: val } ) }
+					/>
 				</PanelBody>
 				<PanelBody title={ __( 'Display Mode', 'beer-list' ) }>
 					<ButtonGroup>
@@ -109,6 +114,17 @@ export default function Edit( { attributes, setAttributes } ) {
 			</InspectorControls>
 
 			<div { ...blockProps }>
+				{ showSearch && (
+					<div className="beverage-list__search">
+						<input
+							type="search"
+							className="beverage-list__search-input"
+							placeholder={ __( 'Search beverages\u2026', 'beer-list' ) }
+							disabled
+						/>
+					</div>
+				) }
+
 				{ isLoading && (
 					<div className="beverage-list__loading">
 						<Spinner />
