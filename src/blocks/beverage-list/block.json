@@ -1,0 +1,37 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "beer-list/beverage-list",
+	"version": "1.0.0",
+	"title": "Beverage List",
+	"category": "widgets",
+	"icon": "beer",
+	"description": "Displays a list of beverages from your catalog.",
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"postsPerPage": {
+			"type": "number",
+			"default": 12
+		},
+		"beverageType": {
+			"type": "string",
+			"default": ""
+		},
+		"showFilters": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"textdomain": "beer-list",
+	"editorScript": "file:../../../build/blocks/beverage-list/index.js",
+	"editorStyle": "file:../../../build/blocks/beverage-list/index.css",
+	"style": "file:../../../build/blocks/beverage-list/style-index.css",
+	"render": "file:./render.php"
+}

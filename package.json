@@ -1,0 +1,21 @@
+{
+  "name": "beer-list",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "wp-env": "wp-env",
+    "build": "wp-scripts build",
+    "dev": "wp-scripts start",
+    "start": "wp-env start",
+    "stop": "wp-env stop",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@wordpress/env": "^10.39.0",
+    "@wordpress/scripts": "^31.4.0"
+  }
+}
