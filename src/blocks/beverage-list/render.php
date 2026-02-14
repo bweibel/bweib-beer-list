@@ -8,8 +8,10 @@ $posts_per_page = $attributes['postsPerPage'] ?? 12;
 $beverage_type  = $attributes['beverageType'] ?? '';
 $show_filters   = $attributes['showFilters'] ?? true;
 $display_mode   = $attributes['displayMode'] ?? 'simple';
-$show_search    = $attributes['showSearch'] ?? false;
-$is_detailed    = 'detailed' === $display_mode;
+$show_search     = $attributes['showSearch'] ?? false;
+$show_pagination = $attributes['showPagination'] ?? false;
+$items_per_page  = $attributes['itemsPerPage'] ?? 6;
+$is_detailed     = 'detailed' === $display_mode;
 
 $query_args = array(
 	'post_type'      => 'beverage',
@@ -150,6 +152,10 @@ $beverages = new WP_Query( $query_args );
 			<?php endwhile; ?>
 			<?php wp_reset_postdata(); ?>
 		</div>
+
+		<?php if ( $show_pagination ) : ?>
+			<div class="beverage-list__pagination" data-per-page="<?php echo esc_attr( $items_per_page ); ?>"></div>
+		<?php endif; ?>
 	<?php else : ?>
 		<p class="beverage-list__empty"><?php esc_html_e( 'No beverages found.', 'beer-list' ); ?></p>
 	<?php endif; ?>

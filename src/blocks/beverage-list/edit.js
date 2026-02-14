@@ -5,7 +5,7 @@ import { store as coreStore } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { postsPerPage, beverageType, showFilters, displayMode, showSearch } = attributes;
+	const { postsPerPage, beverageType, showFilters, displayMode, showSearch, showPagination, itemsPerPage } = attributes;
 	const isDetailed = displayMode === 'detailed';
 	const blockProps = useBlockProps( {
 		className: `wp-block-beer-list-beverage-list is-mode-${ displayMode }`,
@@ -111,6 +111,22 @@ export default function Edit( { attributes, setAttributes } ) {
 						}
 					</p>
 				</PanelBody>
+				<PanelBody title={ __( 'Pagination', 'beer-list' ) } initialOpen={ false }>
+					<ToggleControl
+						label={ __( 'Enable pagination', 'beer-list' ) }
+						checked={ showPagination }
+						onChange={ ( val ) => setAttributes( { showPagination: val } ) }
+					/>
+					{ showPagination && (
+						<RangeControl
+							label={ __( 'Items per page', 'beer-list' ) }
+							value={ itemsPerPage }
+							onChange={ ( val ) => setAttributes( { itemsPerPage: val } ) }
+							min={ 1 }
+							max={ 50 }
+						/>
+					) }
+				</PanelBody>
 			</InspectorControls>
 
 			<div { ...blockProps }>
@@ -139,7 +155,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
 				{ ! isLoading && beverages.length > 0 && (
 					<div className="beverage-list__grid">
-						{ beverages.map( ( beverage ) => {
+						{ beverages.slice( 0, showPagination ? itemsPerPage : undefined ).map( ( beverage ) => {
 							const typeNames = getTermNames( beverage.beverage_type, types );
 							const styleNames = isDetailed ? getTermNames( beverage.beverage_style, styles ) : [];
 							const availabilityNames = isDetailed ? getTermNames( beverage.beverage_availability, availabilities ) : [];
@@ -216,6 +232,15 @@ export default function Edit( { attributes, setAttributes } ) {
 								</div>
 							);
 						} ) }
+					</div>
+				) }
+
+				{ showPagination && ! isLoading && beverages.length > itemsPerPage && (
+					<div className="beverage-list__pagination">
+						<span className="beverage-list__page-btn is-disabled">&laquo;</span>
+						<span className="beverage-list__page-btn is-active">1</span>
+						<span className="beverage-list__page-btn">2</span>
+						<span className="beverage-list__page-btn">&raquo;</span>
 					</div>
 				) }
 			</div>

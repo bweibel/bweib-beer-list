@@ -35,6 +35,14 @@
 		"showSearch": {
 			"type": "boolean",
 			"default": false
+		},
+		"showPagination": {
+			"type": "boolean",
+			"default": false
+		},
+		"itemsPerPage": {
+			"type": "number",
+			"default": 6
 		}
 	},
 	"textdomain": "beer-list",
