@@ -1,5 +1,22 @@
 /* Front-end + editor shared styles — structural only. */
 
+/* Shared interactive button base (filter buttons + pagination buttons). */
+.beverage-list__filter,
+.beverage-list__page-btn {
+	background: none;
+	border: 1px solid currentColor;
+	cursor: pointer;
+	font: inherit;
+	opacity: 0.6;
+}
+
+.beverage-list__filter.is-active,
+.beverage-list__page-btn.is-active {
+	opacity: 1;
+	font-weight: 700;
+}
+
+/* Search bar. */
 .beverage-list__search {
 	margin-block-end: 1rem;
 }
@@ -20,6 +37,7 @@
 	outline-offset: -2px;
 }
 
+/* Type filter bar. */
 .beverage-list__filters {
 	display: flex;
 	flex-wrap: wrap;
@@ -28,19 +46,10 @@
 }
 
 .beverage-list__filter {
-	background: none;
-	border: 1px solid currentColor;
 	padding: 0.25rem 0.75rem;
-	cursor: pointer;
-	font: inherit;
-	opacity: 0.6;
 }
 
-.beverage-list__filter.is-active {
-	opacity: 1;
-	font-weight: 700;
-}
-
+/* Beverage grid. */
 .beverage-list__grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -83,6 +92,7 @@
 	opacity: 0.7;
 }
 
+/* Detailed-mode taxonomy fields. */
 .beverage-list__field {
 	display: flex;
 	gap: 0.5rem;
@@ -104,6 +114,7 @@
 	font-size: 0.875em;
 }
 
+/* Empty / loading states. */
 .beverage-list__empty {
 	text-align: center;
 	opacity: 0.6;
@@ -125,18 +136,8 @@
 }
 
 .beverage-list__page-btn {
-	background: none;
-	border: 1px solid currentColor;
 	padding: 0.25rem 0.625rem;
-	cursor: pointer;
-	font: inherit;
 	line-height: 1.4;
-	opacity: 0.6;
-}
-
-.beverage-list__page-btn.is-active {
-	opacity: 1;
-	font-weight: 700;
 }
 
 .beverage-list__page-btn.is-disabled,

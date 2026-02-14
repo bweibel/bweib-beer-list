@@ -4,10 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$posts_per_page = $attributes['postsPerPage'] ?? 12;
-$beverage_type  = $attributes['beverageType'] ?? '';
-$show_filters   = $attributes['showFilters'] ?? true;
-$display_mode   = $attributes['displayMode'] ?? 'simple';
+$posts_per_page  = $attributes['postsPerPage'] ?? 12;
+$beverage_type   = $attributes['beverageType'] ?? '';
+$show_filters    = $attributes['showFilters'] ?? true;
+$display_mode    = $attributes['displayMode'] ?? 'simple';
 $show_search     = $attributes['showSearch'] ?? false;
 $show_pagination = $attributes['showPagination'] ?? false;
 $items_per_page  = $attributes['itemsPerPage'] ?? 6;
@@ -66,32 +66,21 @@ $beverages = new WP_Query( $query_args );
 		<div class="beverage-list__grid">
 			<?php while ( $beverages->have_posts() ) : $beverages->the_post(); ?>
 				<?php
-				$abv   = get_post_meta( get_the_ID(), '_beverage_abv', true );
-				$ibu   = get_post_meta( get_the_ID(), '_beverage_ibu', true );
-				$price = get_post_meta( get_the_ID(), '_beverage_price', true );
-				$notes = get_post_meta( get_the_ID(), '_beverage_tasting_notes', true );
+				$post_id    = get_the_ID();
+				$abv        = get_post_meta( $post_id, '_beverage_abv', true );
+				$ibu        = get_post_meta( $post_id, '_beverage_ibu', true );
+				$price      = get_post_meta( $post_id, '_beverage_price', true );
+				$notes      = get_post_meta( $post_id, '_beverage_tasting_notes', true );
+				$type_slugs = beer_list_get_term_slugs( $post_id, 'beverage_type' );
 
-				$type_terms = get_the_terms( get_the_ID(), 'beverage_type' );
-				$type_slugs = $type_terms && ! is_wp_error( $type_terms )
-					? implode( ' ', wp_list_pluck( $type_terms, 'slug' ) )
-					: '';
-
+				$detailed_fields = array();
 				if ( $is_detailed ) {
-					$type_names        = $type_terms && ! is_wp_error( $type_terms )
-						? wp_list_pluck( $type_terms, 'name' )
-						: array();
-					$style_terms       = get_the_terms( get_the_ID(), 'beverage_style' );
-					$style_names       = $style_terms && ! is_wp_error( $style_terms )
-						? wp_list_pluck( $style_terms, 'name' )
-						: array();
-					$availability_terms = get_the_terms( get_the_ID(), 'beverage_availability' );
-					$availability_names = $availability_terms && ! is_wp_error( $availability_terms )
-						? wp_list_pluck( $availability_terms, 'name' )
-						: array();
-					$format_terms      = get_the_terms( get_the_ID(), 'serving_format' );
-					$format_names      = $format_terms && ! is_wp_error( $format_terms )
-						? wp_list_pluck( $format_terms, 'name' )
-						: array();
+					$detailed_fields = array(
+						__( 'Type', 'beer-list' )         => beer_list_get_term_names( $post_id, 'beverage_type' ),
+						__( 'Style', 'beer-list' )        => beer_list_get_term_names( $post_id, 'beverage_style' ),
+						__( 'Availability', 'beer-list' ) => beer_list_get_term_names( $post_id, 'beverage_availability' ),
+						__( 'Serving', 'beer-list' )      => beer_list_get_term_names( $post_id, 'serving_format' ),
+					);
 				}
 				?>
 				<div class="beverage-list__item" data-types="<?php echo esc_attr( $type_slugs ); ?>">
@@ -104,18 +93,19 @@ $beverages = new WP_Query( $query_args );
 					<div class="beverage-list__content">
 						<h3 class="beverage-list__title"><?php the_title(); ?></h3>
 
-						<?php if ( $is_detailed && ! empty( $type_names ) ) : ?>
-							<div class="beverage-list__field">
-								<span class="beverage-list__label"><?php esc_html_e( 'Type', 'beer-list' ); ?></span>
-								<span><?php echo esc_html( implode( ', ', $type_names ) ); ?></span>
-							</div>
-						<?php endif; ?>
-
-						<?php if ( $is_detailed && ! empty( $style_names ) ) : ?>
-							<div class="beverage-list__field">
-								<span class="beverage-list__label"><?php esc_html_e( 'Style', 'beer-list' ); ?></span>
-								<span><?php echo esc_html( implode( ', ', $style_names ) ); ?></span>
-							</div>
+						<?php if ( $is_detailed ) : ?>
+							<?php
+							// Render Type and Style fields before meta.
+							foreach ( array( __( 'Type', 'beer-list' ), __( 'Style', 'beer-list' ) ) as $field_label ) :
+								$field_names = $detailed_fields[ $field_label ] ?? array();
+								if ( ! empty( $field_names ) ) :
+									?>
+									<div class="beverage-list__field">
+										<span class="beverage-list__label"><?php echo esc_html( $field_label ); ?></span>
+										<span><?php echo esc_html( implode( ', ', $field_names ) ); ?></span>
+									</div>
+								<?php endif; ?>
+							<?php endforeach; ?>
 						<?php endif; ?>
 
 						<div class="beverage-list__meta">
@@ -130,18 +120,19 @@ $beverages = new WP_Query( $query_args );
 							<?php endif; ?>
 						</div>
 
-						<?php if ( $is_detailed && ! empty( $availability_names ) ) : ?>
-							<div class="beverage-list__field">
-								<span class="beverage-list__label"><?php esc_html_e( 'Availability', 'beer-list' ); ?></span>
-								<span><?php echo esc_html( implode( ', ', $availability_names ) ); ?></span>
-							</div>
-						<?php endif; ?>
-
-						<?php if ( $is_detailed && ! empty( $format_names ) ) : ?>
-							<div class="beverage-list__field">
-								<span class="beverage-list__label"><?php esc_html_e( 'Serving', 'beer-list' ); ?></span>
-								<span><?php echo esc_html( implode( ', ', $format_names ) ); ?></span>
-							</div>
+						<?php if ( $is_detailed ) : ?>
+							<?php
+							// Render Availability and Serving fields after meta.
+							foreach ( array( __( 'Availability', 'beer-list' ), __( 'Serving', 'beer-list' ) ) as $field_label ) :
+								$field_names = $detailed_fields[ $field_label ] ?? array();
+								if ( ! empty( $field_names ) ) :
+									?>
+									<div class="beverage-list__field">
+										<span class="beverage-list__label"><?php echo esc_html( $field_label ); ?></span>
+										<span><?php echo esc_html( implode( ', ', $field_names ) ); ?></span>
+									</div>
+								<?php endif; ?>
+							<?php endforeach; ?>
 						<?php endif; ?>
 
 						<?php if ( $notes ) : ?>

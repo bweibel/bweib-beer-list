@@ -97,3 +97,33 @@ function beer_list_register_taxonomies() {
 		'rewrite'           => array( 'slug' => 'serving-format' ),
 	) );
 }
+
+/**
+ * Get an array of term names for a post + taxonomy, or an empty array.
+ *
+ * @param int    $post_id  Post ID.
+ * @param string $taxonomy Taxonomy slug.
+ * @return string[]
+ */
+function beer_list_get_term_names( $post_id, $taxonomy ) {
+	$terms = get_the_terms( $post_id, $taxonomy );
+	if ( $terms && ! is_wp_error( $terms ) ) {
+		return wp_list_pluck( $terms, 'name' );
+	}
+	return array();
+}
+
+/**
+ * Get space-separated term slugs for a post + taxonomy, or an empty string.
+ *
+ * @param int    $post_id  Post ID.
+ * @param string $taxonomy Taxonomy slug.
+ * @return string
+ */
+function beer_list_get_term_slugs( $post_id, $taxonomy ) {
+	$terms = get_the_terms( $post_id, $taxonomy );
+	if ( $terms && ! is_wp_error( $terms ) ) {
+		return implode( ' ', wp_list_pluck( $terms, 'slug' ) );
+	}
+	return '';
+}

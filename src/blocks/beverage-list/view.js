@@ -1,17 +1,18 @@
 document.querySelectorAll( '.wp-block-beer-list-beverage-list' ).forEach( ( list ) => {
 	const filterBar = list.querySelector( '.beverage-list__filters' );
 	const searchInput = list.querySelector( '.beverage-list__search-input' );
-	const pagination = list.querySelector( '.beverage-list__pagination' );
+	const paginationContainer = list.querySelector( '.beverage-list__pagination' );
 	const items = list.querySelectorAll( '.beverage-list__item' );
 
 	let activeType = '';
 	let searchTerm = '';
 	let currentPage = 1;
-	const perPage = pagination ? parseInt( pagination.dataset.perPage, 10 ) || 6 : 0;
+	const perPage = paginationContainer
+		? parseInt( paginationContainer.dataset.perPage, 10 ) || 6
+		: 0;
 
-	function getVisibleItems() {
+	function getMatchedItems() {
 		const term = searchTerm.toLowerCase();
-
 		return Array.from( items ).filter( ( item ) => {
 			const matchesType = ! activeType || item.dataset.types.split( ' ' ).includes( activeType );
 			const matchesSearch = ! term || item.textContent.toLowerCase().includes( term );
@@ -19,79 +20,67 @@ document.querySelectorAll( '.wp-block-beer-list-beverage-list' ).forEach( ( list
 		} );
 	}
 
-	function renderPagination( totalItems ) {
-		if ( ! pagination ) {
+	function createPageButton( label, onClick, { active = false, disabled = false } = {} ) {
+		const btn = document.createElement( 'button' );
+		btn.className = 'beverage-list__page-btn';
+		btn.textContent = label;
+
+		if ( active ) {
+			btn.classList.add( 'is-active' );
+		}
+		if ( disabled ) {
+			btn.classList.add( 'is-disabled' );
+			btn.disabled = true;
+		}
+
+		btn.addEventListener( 'click', onClick );
+		return btn;
+	}
+
+	function renderPagination( matchedCount ) {
+		if ( ! paginationContainer ) {
 			return;
 		}
 
-		const totalPages = Math.ceil( totalItems / perPage );
-		pagination.innerHTML = '';
+		paginationContainer.innerHTML = '';
+		const totalPages = Math.ceil( matchedCount / perPage );
 
 		if ( totalPages <= 1 ) {
 			return;
 		}
 
-		const prev = document.createElement( 'button' );
-		prev.className = 'beverage-list__page-btn';
-		prev.textContent = '\u00AB';
-		prev.disabled = currentPage === 1;
-		if ( currentPage === 1 ) {
-			prev.classList.add( 'is-disabled' );
-		}
-		prev.addEventListener( 'click', () => {
-			if ( currentPage > 1 ) {
-				currentPage--;
-				applyAll();
-			}
-		} );
-		pagination.appendChild( prev );
+		const goToPage = ( page ) => {
+			currentPage = page;
+			applyAll();
+		};
+
+		paginationContainer.appendChild(
+			createPageButton( '\u00AB', () => goToPage( currentPage - 1 ), { disabled: currentPage === 1 } )
+		);
 
 		for ( let i = 1; i <= totalPages; i++ ) {
-			const btn = document.createElement( 'button' );
-			btn.className = 'beverage-list__page-btn';
-			btn.textContent = i;
-			if ( i === currentPage ) {
-				btn.classList.add( 'is-active' );
-			}
-			btn.addEventListener( 'click', () => {
-				currentPage = i;
-				applyAll();
-			} );
-			pagination.appendChild( btn );
+			paginationContainer.appendChild(
+				createPageButton( String( i ), () => goToPage( i ), { active: i === currentPage } )
+			);
 		}
 
-		const next = document.createElement( 'button' );
-		next.className = 'beverage-list__page-btn';
-		next.textContent = '\u00BB';
-		next.disabled = currentPage === totalPages;
-		if ( currentPage === totalPages ) {
-			next.classList.add( 'is-disabled' );
-		}
-		next.addEventListener( 'click', () => {
-			if ( currentPage < totalPages ) {
-				currentPage++;
-				applyAll();
-			}
-		} );
-		pagination.appendChild( next );
+		paginationContainer.appendChild(
+			createPageButton( '\u00BB', () => goToPage( currentPage + 1 ), { disabled: currentPage === totalPages } )
+		);
 	}
 
 	function applyAll() {
-		const matched = getVisibleItems();
+		const matched = getMatchedItems();
 
-		// Hide everything first.
 		items.forEach( ( item ) => {
 			item.hidden = true;
 		} );
 
-		if ( pagination && perPage > 0 ) {
+		if ( paginationContainer && perPage > 0 ) {
 			const start = ( currentPage - 1 ) * perPage;
-			const paged = matched.slice( start, start + perPage );
-
-			paged.forEach( ( item ) => {
+			matched.slice( start, start + perPage ).forEach( ( item ) => {
 				item.hidden = false;
 			} );
-
 			renderPagination( matched.length );
 		} else {
 			matched.forEach( ( item ) => {
@@ -101,14 +90,12 @@ document.querySelectorAll( '.wp-block-beer-list-beverage-list' ).forEach( ( list
 	}
 
 	if ( filterBar ) {
-		const buttons = filterBar.querySelectorAll( '.beverage-list__filter' );
-
-		buttons.forEach( ( btn ) => {
+		filterBar.querySelectorAll( '.beverage-list__filter' ).forEach( ( btn ) => {
 			btn.addEventListener( 'click', () => {
 				activeType = btn.dataset.type;
 				currentPage = 1;
 
-				buttons.forEach( ( b ) => b.classList.remove( 'is-active' ) );
+				filterBar.querySelectorAll( '.beverage-list__filter' ).forEach( ( b ) => b.classList.remove( 'is-active' ) );
 				btn.classList.add( 'is-active' );
 
 				applyAll();
