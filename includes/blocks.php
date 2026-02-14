@@ -8,6 +8,7 @@ add_action( 'init', 'beer_list_register_blocks' );
 
 function beer_list_register_blocks() {
 	register_block_type( BEER_LIST_PLUGIN_DIR . 'src/blocks/beverage-list' );
+	register_block_type( BEER_LIST_PLUGIN_DIR . 'src/blocks/beverage-detail' );
 
 	wp_register_script(
 		'beer-list-beverage-list-view',

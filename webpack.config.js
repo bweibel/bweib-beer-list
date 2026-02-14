@@ -6,6 +6,7 @@ module.exports = {
 	entry: {
 		'blocks/beverage-list/index': path.resolve( __dirname, 'src/blocks/beverage-list/index.js' ),
 		'blocks/beverage-list/view': path.resolve( __dirname, 'src/blocks/beverage-list/view.js' ),
+		'blocks/beverage-detail/index': path.resolve( __dirname, 'src/blocks/beverage-detail/index.js' ),
 	},
 	output: {
 		...defaultConfig.output,

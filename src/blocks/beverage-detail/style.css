@@ -1,0 +1,66 @@
+/* Front-end + editor shared styles for Beverage Detail. */
+
+.wp-block-beer-list-beverage-detail {
+	--bl-detail-gap: 1.5rem;
+	--bl-detail-padding: 0.75rem;
+	--bl-detail-font-size-sm: 0.875em;
+	--bl-detail-opacity-meta: 0.7;
+	--bl-detail-image-aspect-ratio: 4 / 3;
+}
+
+.beverage-detail__card {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--bl-detail-gap);
+}
+
+.beverage-detail__image {
+	flex: 1 1 300px;
+	max-width: 400px;
+}
+
+.beverage-detail__image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: var(--bl-detail-image-aspect-ratio);
+	object-fit: cover;
+}
+
+.beverage-detail__body {
+	flex: 2 1 300px;
+}
+
+.beverage-detail__title {
+	margin: 0 0 0.5rem;
+}
+
+.beverage-detail__field {
+	display: flex;
+	gap: 0.5rem;
+	font-size: var(--bl-detail-font-size-sm);
+	margin-block-start: 0.25rem;
+}
+
+.beverage-detail__label {
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.beverage-detail__label::after {
+	content: ":";
+}
+
+.beverage-detail__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	font-size: var(--bl-detail-font-size-sm);
+	opacity: var(--bl-detail-opacity-meta);
+	margin-block-start: 0.5rem;
+}
+
+.beverage-detail__notes {
+	margin-block-start: 0.75rem;
+	font-size: var(--bl-detail-font-size-sm);
+}
