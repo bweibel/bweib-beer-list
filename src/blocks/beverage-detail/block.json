@@ -1,0 +1,29 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "beer-list/beverage-detail",
+	"version": "1.0.0",
+	"title": "Beverage Detail",
+	"category": "widgets",
+	"icon": "beer",
+	"description": "Displays full details for a single beverage. Defaults to the current post when placed on a beverage template.",
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"margin": true,
+			"padding": true
+		}
+	},
+	"attributes": {
+		"beverageId": {
+			"type": "number",
+			"default": 0
+		}
+	},
+	"textdomain": "beer-list",
+	"editorScript": "file:../../../build/blocks/beverage-detail/index.js",
+	"editorStyle": "file:../../../build/blocks/beverage-detail/index.css",
+	"style": "file:../../../build/blocks/beverage-detail/style-index.css",
+	"render": "file:./render.php"
+}
