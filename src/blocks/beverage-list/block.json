@@ -27,6 +27,10 @@
 		"showFilters": {
 			"type": "boolean",
 			"default": true
+		},
+		"displayMode": {
+			"type": "string",
+			"default": "simple"
 		}
 	},
 	"textdomain": "beer-list",

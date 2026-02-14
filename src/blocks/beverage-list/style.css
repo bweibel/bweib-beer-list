@@ -63,6 +63,22 @@
 	opacity: 0.7;
 }
 
+.beverage-list__field {
+	display: flex;
+	gap: 0.5rem;
+	font-size: 0.875em;
+	margin-block-start: 0.25rem;
+}
+
+.beverage-list__label {
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.beverage-list__label::after {
+	content: ":";
+}
+
 .beverage-list__notes {
 	margin-block-start: 0.5rem;
 	font-size: 0.875em;
@@ -77,4 +93,9 @@
 	display: flex;
 	justify-content: center;
 	padding: 2rem;
+}
+
+/* Detailed mode — wider cards to fit extra fields. */
+.is-mode-detailed .beverage-list__grid {
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
