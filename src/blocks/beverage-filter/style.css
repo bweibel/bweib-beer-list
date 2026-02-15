@@ -53,6 +53,39 @@
 	font-weight: 700;
 }
 
+/* ── Sort buttons ──────────────────────────────────────────────────── */
+.beverage-filter__sort {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--bl-gap-filters);
+	margin-block-start: 1rem;
+}
+
+.beverage-filter__btn--sort::after {
+	content: '';
+	display: inline-block;
+	width: 1em;
+	text-align: center;
+}
+
+.beverage-filter__btn--sort.is-asc {
+	opacity: 1;
+	font-weight: 700;
+}
+
+.beverage-filter__btn--sort.is-asc::after {
+	content: ' ↑';
+}
+
+.beverage-filter__btn--sort.is-desc {
+	opacity: 1;
+	font-weight: 700;
+}
+
+.beverage-filter__btn--sort.is-desc::after {
+	content: ' ↓';
+}
+
 /* ── Empty state ───────────────────────────────────────────────────── */
 .beverage-filter__empty {
 	text-align: center;

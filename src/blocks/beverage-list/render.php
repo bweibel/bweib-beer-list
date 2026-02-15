@@ -73,6 +73,10 @@ $beverages = new WP_Query( $query_args );
 				$notes      = get_post_meta( $post_id, '_beverage_tasting_notes', true );
 				$type_slugs = beer_list_get_term_slugs( $post_id, 'beverage_type' );
 
+				// Extract the first numeric value from the price string for client-side sorting.
+				preg_match( '/[\d]+(?:\.\d+)?/', $price, $price_match );
+				$price_numeric = isset( $price_match[0] ) ? $price_match[0] : '';
+
 				$detailed_fields = array();
 				if ( $is_detailed ) {
 					$detailed_fields = array(
@@ -83,7 +87,12 @@ $beverages = new WP_Query( $query_args );
 					);
 				}
 				?>
-				<div class="beverage-list__item" data-types="<?php echo esc_attr( $type_slugs ); ?>">
+				<div class="beverage-list__item"
+					data-types="<?php echo esc_attr( $type_slugs ); ?>"
+					data-abv="<?php echo esc_attr( $abv ); ?>"
+					data-ibu="<?php echo esc_attr( $ibu ); ?>"
+					data-price="<?php echo esc_attr( $price_numeric ); ?>"
+				>
 					<?php if ( has_post_thumbnail() ) : ?>
 						<div class="beverage-list__image">
 							<?php the_post_thumbnail( 'medium' ); ?>

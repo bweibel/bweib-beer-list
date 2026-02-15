@@ -2,18 +2,59 @@ document.querySelectorAll( '.wp-block-beer-list-beverage-list' ).forEach( ( list
 	const filterBar = list.querySelector( '.beverage-list__filters' );
 	const searchInput = list.querySelector( '.beverage-list__search-input' );
 	const paginationContainer = list.querySelector( '.beverage-list__pagination' );
+	const grid = list.querySelector( '.beverage-list__grid' );
 	const items = list.querySelectorAll( '.beverage-list__item' );
+
+	// Capture original DOM order so sorting can always start from a stable baseline.
+	const originalOrder = Array.from( items );
 
 	let activeType = '';
 	let searchTerm = '';
+	let sortKey = '';
 	let currentPage = 1;
 	const perPage = paginationContainer
 		? parseInt( paginationContainer.dataset.perPage, 10 ) || 6
 		: 0;
 
+	/**
+	 * Return the numeric sort value for an item by field key.
+	 * Items with no value (empty string) return null so they sort last
+	 * regardless of sort direction.
+	 */
+	function getSortValue( item, field ) {
+		const raw = item.dataset[ field ];
+		if ( raw === undefined || raw === '' ) {
+			return null;
+		}
+		return parseFloat( raw ) || 0;
+	}
+
+	/**
+	 * Sort an array of items by the current sortKey.
+	 * Items missing the sort field always appear at the end.
+	 */
+	function sortItems( matched ) {
+		if ( ! sortKey ) {
+			return matched;
+		}
+
+		const [ field, dir ] = sortKey.split( '-' ); // e.g. ['abv', 'asc']
+
+		return [ ...matched ].sort( ( a, b ) => {
+			const av = getSortValue( a, field );
+			const bv = getSortValue( b, field );
+
+			if ( av === null && bv === null ) return 0;
+			if ( av === null ) return 1;
+			if ( bv === null ) return -1;
+
+			return dir === 'asc' ? av - bv : bv - av;
+		} );
+	}
+
 	function getMatchedItems() {
 		const term = searchTerm.toLowerCase();
-		return Array.from( items ).filter( ( item ) => {
+		return originalOrder.filter( ( item ) => {
 			const matchesType = ! activeType || item.dataset.types.split( ' ' ).includes( activeType );
 			const matchesSearch = ! term || item.textContent.toLowerCase().includes( term );
 			return matchesType && matchesSearch;
@@ -71,19 +112,31 @@ document.querySelectorAll( '.wp-block-beer-list-beverage-list' ).forEach( ( list
 
 	function applyAll() {
 		const matched = getMatchedItems();
+		const sorted = sortItems( matched );
 
-		items.forEach( ( item ) => {
+		// Hide every item first.
+		originalOrder.forEach( ( item ) => {
 			item.hidden = true;
 		} );
 
+		// Determine the visible slice, then move and show each item in sorted
+		// order by appending to the grid (appendChild moves existing nodes).
+		let visible;
 		if ( paginationContainer && perPage > 0 ) {
 			const start = ( currentPage - 1 ) * perPage;
-			matched.slice( start, start + perPage ).forEach( ( item ) => {
+			visible = sorted.slice( start, start + perPage );
+			renderPagination( sorted.length );
+		} else {
+			visible = sorted;
+		}
+
+		if ( grid ) {
+			visible.forEach( ( item ) => {
+				grid.appendChild( item );
 				item.hidden = false;
 			} );
-			renderPagination( matched.length );
 		} else {
-			matched.forEach( ( item ) => {
+			visible.forEach( ( item ) => {
 				item.hidden = false;
 			} );
 		}
@@ -111,7 +164,7 @@ document.querySelectorAll( '.wp-block-beer-list-beverage-list' ).forEach( ( list
 		} );
 	}
 
-	// Listen for external filter events from the beverage-filter block.
+	// Listen for external filter/sort events from the beverage-filter block.
 	document.addEventListener( 'beverage-filter-change', ( e ) => {
 		const detail = e.detail || {};
 
@@ -133,6 +186,10 @@ document.querySelectorAll( '.wp-block-beer-list-beverage-list' ).forEach( ( list
 			if ( searchInput ) {
 				searchInput.value = searchTerm;
 			}
+		}
+
+		if ( typeof detail.sort === 'string' ) {
+			sortKey = detail.sort;
 		}
 
 		currentPage = 1;

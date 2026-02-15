@@ -5,7 +5,7 @@ import { store as coreStore } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 
 export default function Edit( { attributes, setAttributes } ) {
-	const { showSearch, showTypeFilter } = attributes;
+	const { showSearch, showTypeFilter, showSort } = attributes;
 	const blockProps = useBlockProps( {
 		className: 'wp-block-beer-list-beverage-filter',
 	} );
@@ -20,6 +20,8 @@ export default function Edit( { attributes, setAttributes } ) {
 		};
 	}, [] );
 
+	const nothingEnabled = ! showSearch && ! showTypeFilter && ! showSort;
+
 	return (
 		<>
 			<InspectorControls>
@@ -33,6 +35,11 @@ export default function Edit( { attributes, setAttributes } ) {
 						label={ __( 'Show type filter buttons', 'beer-list' ) }
 						checked={ showTypeFilter }
 						onChange={ ( val ) => setAttributes( { showTypeFilter: val } ) }
+					/>
+					<ToggleControl
+						label={ __( 'Show sort controls', 'beer-list' ) }
+						checked={ showSort }
+						onChange={ ( val ) => setAttributes( { showSort: val } ) }
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -68,7 +75,21 @@ export default function Edit( { attributes, setAttributes } ) {
 					</div>
 				) }
 
-				{ ! showSearch && ! showTypeFilter && (
+				{ showSort && (
+					<div className="beverage-filter__sort">
+						{ [ 'ABV', 'IBU', 'Price' ].map( ( label ) => (
+							<button
+								key={ label }
+								className="beverage-filter__btn beverage-filter__btn--sort"
+								disabled
+							>
+								{ label }
+							</button>
+						) ) }
+					</div>
+				) }
+
+				{ nothingEnabled && (
 					<p className="beverage-filter__empty">
 						{ __( 'Enable at least one filter option in the block settings.', 'beer-list' ) }
 					</p>

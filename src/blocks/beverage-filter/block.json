@@ -23,6 +23,10 @@
 		"showTypeFilter": {
 			"type": "boolean",
 			"default": true
+		},
+		"showSort": {
+			"type": "boolean",
+			"default": true
 		}
 	},
 	"textdomain": "beer-list",

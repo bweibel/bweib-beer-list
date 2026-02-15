@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $show_search      = $attributes['showSearch'] ?? true;
 $show_type_filter = $attributes['showTypeFilter'] ?? true;
+$show_sort        = $attributes['showSort'] ?? true;
 ?>
 
 <div <?php echo get_block_wrapper_attributes( array( 'class' => 'wp-block-beer-list-beverage-filter' ) ); ?>>
@@ -36,5 +37,13 @@ $show_type_filter = $attributes['showTypeFilter'] ?? true;
 				<?php endforeach; ?>
 			</div>
 		<?php endif; ?>
+	<?php endif; ?>
+
+	<?php if ( $show_sort ) : ?>
+		<div class="beverage-filter__sort">
+			<button class="beverage-filter__btn beverage-filter__btn--sort" data-sort="abv"><?php esc_html_e( 'ABV', 'beer-list' ); ?></button>
+			<button class="beverage-filter__btn beverage-filter__btn--sort" data-sort="ibu"><?php esc_html_e( 'IBU', 'beer-list' ); ?></button>
+			<button class="beverage-filter__btn beverage-filter__btn--sort" data-sort="price"><?php esc_html_e( 'Price', 'beer-list' ); ?></button>
+		</div>
 	<?php endif; ?>
 </div>
