@@ -1,0 +1,66 @@
+/* Front-end + editor shared styles for beverage-filter block. */
+
+.wp-block-beer-list-beverage-filter {
+	--bl-gap-filters: 0.5rem;
+	--bl-padding-btn: 0.25rem 0.75rem;
+	--bl-color-border: currentColor;
+	--bl-color-accent: currentColor;
+	--bl-opacity-muted: 0.6;
+
+	color: inherit;
+}
+
+/* ── Search bar ────────────────────────────────────────────────────── */
+.beverage-filter__search {
+	margin-block-end: 1rem;
+}
+
+.beverage-filter__search-input {
+	width: 100%;
+	max-width: 360px;
+	padding: 0.5rem 0.75rem;
+	font: inherit;
+	border: 1px solid var(--bl-color-border);
+	background: transparent;
+	opacity: 0.8;
+}
+
+.beverage-filter__search-input:focus {
+	opacity: 1;
+	outline: 2px solid var(--bl-color-accent);
+	outline-offset: -2px;
+}
+
+/* ── Type filter buttons ───────────────────────────────────────────── */
+.beverage-filter__buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--bl-gap-filters);
+}
+
+.beverage-filter__btn {
+	background: none;
+	border: 1px solid var(--bl-color-border);
+	cursor: pointer;
+	font: inherit;
+	color: var(--bl-color-accent);
+	opacity: var(--bl-opacity-muted);
+	padding: var(--bl-padding-btn);
+}
+
+.beverage-filter__btn.is-active {
+	opacity: 1;
+	font-weight: 700;
+}
+
+/* ── Empty state ───────────────────────────────────────────────────── */
+.beverage-filter__empty {
+	text-align: center;
+	opacity: var(--bl-opacity-muted);
+}
+
+.beverage-filter__loading {
+	display: flex;
+	justify-content: center;
+	padding: 2rem;
+}

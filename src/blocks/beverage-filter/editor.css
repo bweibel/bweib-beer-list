@@ -1,0 +1,5 @@
+/* Editor-only styles for the beverage-filter block. */
+
+.wp-block-beer-list-beverage-filter .beverage-filter__btn {
+	cursor: default;
+}

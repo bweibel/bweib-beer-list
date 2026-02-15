@@ -6,6 +6,7 @@
   "scripts": {
     "wp-env": "wp-env",
     "build": "wp-scripts build",
+    "package": "node scripts/package.js",
     "dev": "wp-scripts start",
     "start": "wp-env start",
     "stop": "wp-env stop",
