@@ -20,3 +20,4 @@ require_once BEER_LIST_PLUGIN_DIR . 'includes/taxonomies.php';
 require_once BEER_LIST_PLUGIN_DIR . 'includes/meta-fields.php';
 require_once BEER_LIST_PLUGIN_DIR . 'includes/blocks.php';
 require_once BEER_LIST_PLUGIN_DIR . 'includes/settings.php';
+require_once BEER_LIST_PLUGIN_DIR . 'includes/csv-importer.php';
