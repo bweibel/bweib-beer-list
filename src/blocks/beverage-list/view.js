@@ -111,6 +111,34 @@ document.querySelectorAll( '.wp-block-beer-list-beverage-list' ).forEach( ( list
 		} );
 	}
 
+	// Listen for external filter events from the beverage-filter block.
+	document.addEventListener( 'beverage-filter-change', ( e ) => {
+		const detail = e.detail || {};
+
+		if ( typeof detail.type === 'string' ) {
+			activeType = detail.type;
+
+			// Sync inline filter bar active state if present.
+			if ( filterBar ) {
+				filterBar.querySelectorAll( '.beverage-list__filter' ).forEach( ( b ) => {
+					b.classList.toggle( 'is-active', b.dataset.type === activeType );
+				} );
+			}
+		}
+
+		if ( typeof detail.search === 'string' ) {
+			searchTerm = detail.search;
+
+			// Sync inline search input if present.
+			if ( searchInput ) {
+				searchInput.value = searchTerm;
+			}
+		}
+
+		currentPage = 1;
+		applyAll();
+	} );
+
 	// Initial render — paginate on load if enabled.
 	applyAll();
 } );
